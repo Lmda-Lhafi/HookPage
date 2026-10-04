@@ -1,27 +1,40 @@
 # Product Spotlight Generator
 
-Create a professional, shareable product landing page in minutes — no design or marketing skills required.
+A Next.js app that uses Gemini to draft itch.io game copy and render a shareable preview.
 
-## 💡 Product Vision
+## Requirements
 
-**Product Spotlight** is a web application that enables developers, startups, and creators to instantly generate clean and professional product landing pages by providing basic product information such as a name, description, and image. Using smart templates and AI-assisted copy generation, the platform automatically builds a complete product page—including layout, content, and call-to-action—making it easy to showcase products, validate ideas, and share them publicly.
+- Node.js 20.9 or newer
+- A Google AI Studio API key
 
-## ✨ Minimum Viable Product (MVP)
+## Setup
 
-The MVP focuses on delivering the core value of fast product page generation:
+Install dependencies:
 
-- Product input form
-- Auto-generated product page (hero, features, description, CTA)
-- AI-generated copy (tagline, description, features)
-- Image upload or image URL with optimization
-- Public shareable URL (`/p/slug`)
-- Simple, responsive UI
-- Live deployment with documentation
+```sh
+npm install
+```
 
-## 🛠️ Tech Stack
+Create a root `.env` file and add your key:
 
-- **Backend:** Node.js, Express, MongoDB
-- **Frontend:** Next.js, Tailwind CSS
-- **AI:** OpenAI API
-- **Images:** Cloudinary
-- **Deployment:** Vercel + Render/Railway
+```dotenv
+GEMINI_API_KEY=your-google-ai-studio-api-key
+GEMINI_MODEL=gemini-2.5-flash
+```
+
+`.env` is ignored by Git. Keep the API key private and do not commit this file.
+
+## Commands
+
+```sh
+npm run dev
+npm run test:ai
+npm run lint
+npm run build
+```
+
+The form submits to `/api/generate`. Successful generations redirect to `/p/[slug]`, where each copy section can be copied separately.
+
+## Storage
+
+Preview data currently lives in a process-local in-memory `Map`. Links work only while the generating server process retains that data; restarts, serverless execution, and multiple server instances require persistent storage.
