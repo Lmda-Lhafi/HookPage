@@ -1,6 +1,12 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getPage } from '@/lib/db'
 import { CopyButton } from './copy-button'
+
+export const metadata: Metadata = {
+  title: 'Game Copy Preview',
+  robots: { index: false, follow: false },
+}
 
 function CopyBlock({ title, text }: { title: string; text: string }) {
   return (

@@ -3,6 +3,7 @@
 import type { FormEvent } from 'react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 export default function Page() {
   const router = useRouter()
@@ -59,12 +60,24 @@ export default function Page() {
     <main className="min-h-screen bg-slate-950 px-4 py-12 text-slate-100">
       <div className="mx-auto max-w-2xl">
         <div className="mb-8">
-          <p className="mb-2 text-sm font-medium uppercase tracking-[0.2em] text-violet-400">
-            Product Spotlight
-          </p>
+          <div className="mb-4 flex items-center gap-3">
+            <Image
+              src="/product-spotlight-logo.svg"
+              alt=""
+              width={48}
+              height={48}
+              priority
+            />
+            <p className="text-sm font-medium uppercase tracking-[0.2em] text-violet-400">
+              Product Spotlight
+            </p>
+          </div>
           <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-            Add a game to spotlight
+            Itch.io game description generator
           </h1>
+          <p className="mt-3 max-w-xl text-base leading-7 text-slate-300">
+            Turn rough game notes into a hook, pitch, full description, feature list, and call to action ready to paste into your itch.io page.
+          </p>
         </div>
 
         <form
