@@ -43,7 +43,7 @@ export async function POST(request: Request) {
       ...copy,
     }
 
-    savePage(page)
+    await savePage(page)
     return Response.json({ slug })
   } catch (error) {
     console.error(

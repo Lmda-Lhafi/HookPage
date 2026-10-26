@@ -20,9 +20,11 @@ Create a root `.env` file and add your key:
 ```dotenv
 GEMINI_API_KEY=your-google-ai-studio-api-key
 GEMINI_MODEL=gemini-2.5-flash
+UPSTASH_REDIS_REST_URL=your-upstash-rest-url
+UPSTASH_REDIS_REST_TOKEN=your-upstash-rest-token
 ```
 
-`.env` is ignored by Git. Keep the API key private and do not commit this file.
+The two Upstash settings are optional as a pair. If either is configured, both are required. `.env` is ignored by Git; keep all keys private and do not commit this file.
 
 ## Commands
 
@@ -37,4 +39,4 @@ The form submits to `/api/generate`. Successful generations redirect to `/p/[slu
 
 ## Storage
 
-Preview data currently lives in a process-local in-memory `Map`. Links work only while the generating server process retains that data; restarts, serverless execution, and multiple server instances require persistent storage.
+When both Upstash settings are present, preview data is stored in Redis and can be revisited across server restarts. Without them, local development uses a process-local in-memory `Map`; those links are temporary and do not work across restarts or multiple server instances.

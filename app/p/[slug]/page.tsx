@@ -18,7 +18,7 @@ export default async function SpotlightPreview({
   params,
 }: PageProps<'/p/[slug]'>) {
   const { slug } = await params
-  const page = getPage(slug)
+  const page = await getPage(slug)
 
   if (!page) notFound()
 
