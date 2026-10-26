@@ -1,10 +1,10 @@
 <p align="center">
-	<img src="public/product-spotlight-logo.svg" alt="Product Spotlight logo" width="96" height="96">
+	<img src="public/product-spotlight-logo.svg" alt="HookPage logo" width="96" height="96">
 </p>
 
-# Product Spotlight
+# HookPage
 
-Turn rough indie game notes into itch.io-ready copy. Product Spotlight uses Gemini to draft a hook, short pitch, full description, feature bullets, developer note, and call to action, then gives each result a shareable preview page.
+Turn rough indie game notes into itch.io-ready copy. HookPage uses Gemini to draft a hook, short pitch, full description, feature bullets, developer note, and call to action, then gives each result a shareable preview page.
 
 ## What it does
 

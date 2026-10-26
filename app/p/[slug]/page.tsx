@@ -5,7 +5,7 @@ import { CopyButton } from './copy-button'
 
 export const metadata: Metadata = {
   title: 'Game Copy Preview',
-  robots: { index: false, follow: false },
+  robots: { index: false },
 }
 
 function CopyBlock({ title, text }: { title: string; text: string }) {
