@@ -1,5 +1,5 @@
 import { generateSpotlightCopy } from '@/lib/ai'
-import { savePage, type SpotlightPage } from '@/lib/db'
+import { isRedisConfigured, savePage, type SpotlightPage } from '@/lib/db'
 import { nanoid } from 'nanoid'
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -22,6 +22,13 @@ export async function POST(request: Request) {
     return Response.json(
       { error: 'Product name and rough description are required.' },
       { status: 400 },
+    )
+  }
+
+  if (process.env.NODE_ENV === 'production' && !isRedisConfigured()) {
+    return Response.json(
+      { error: 'Preview storage is not configured. Add REDIS_URL to the deployment.' },
+      { status: 503 },
     )
   }
 

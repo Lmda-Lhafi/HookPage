@@ -1,4 +1,4 @@
-import { Redis } from '@upstash/redis'
+import { createClient, type RedisClientType } from 'redis'
 import type { SpotlightCopy } from '@/lib/ai'
 
 export type SpotlightPage = SpotlightCopy & {
@@ -9,14 +9,8 @@ export type SpotlightPage = SpotlightCopy & {
   coverImageUrl: string
 }
 
-const redisUrl = process.env.UPSTASH_REDIS_REST_URL
-const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN
-
-if ((redisUrl && !redisToken) || (!redisUrl && redisToken)) {
-  throw new Error('Both UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN must be configured.')
-}
-
-const redis = redisUrl && redisToken ? new Redis({ url: redisUrl, token: redisToken }) : undefined
+const redisUrl = process.env.REDIS_URL
+let redisClientPromise: Promise<RedisClientType> | undefined
 
 const globalForSpotlight = globalThis as typeof globalThis & {
   spotlightPages?: Map<string, SpotlightPage>
@@ -24,9 +18,30 @@ const globalForSpotlight = globalThis as typeof globalThis & {
 
 const pages = (globalForSpotlight.spotlightPages ??= new Map<string, SpotlightPage>())
 
+export function isRedisConfigured(): boolean {
+  return Boolean(redisUrl)
+}
+
+async function getRedisClient() {
+  if (!redisUrl) return undefined
+
+  if (!redisClientPromise) {
+    const client = createClient({ url: redisUrl })
+    client.on('error', (error) => console.error('Redis client error:', error.message))
+
+    redisClientPromise = client.connect().then(() => client).catch((error: unknown) => {
+      redisClientPromise = undefined
+      throw error
+    })
+  }
+
+  return redisClientPromise
+}
+
 export async function savePage(page: SpotlightPage): Promise<void> {
-  if (redis) {
-    await redis.set(page.slug, page)
+  const client = await getRedisClient()
+  if (client) {
+    await client.set(page.slug, JSON.stringify(page))
     return
   }
 
@@ -34,8 +49,10 @@ export async function savePage(page: SpotlightPage): Promise<void> {
 }
 
 export async function getPage(slug: string): Promise<SpotlightPage | undefined> {
-  if (redis) {
-    return (await redis.get<SpotlightPage>(slug)) ?? undefined
+  const client = await getRedisClient()
+  if (client) {
+    const page = await client.get(slug)
+    return page ? JSON.parse(page) as SpotlightPage : undefined
   }
 
   return pages.get(slug)

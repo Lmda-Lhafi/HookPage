@@ -20,11 +20,10 @@ Create a root `.env` file and add your key:
 ```dotenv
 GEMINI_API_KEY=your-google-ai-studio-api-key
 GEMINI_MODEL=gemini-2.5-flash
-UPSTASH_REDIS_REST_URL=your-upstash-rest-url
-UPSTASH_REDIS_REST_TOKEN=your-upstash-rest-token
+REDIS_URL=rediss://your-redis-connection-url
 ```
 
-The two Upstash settings are optional as a pair. If either is configured, both are required. `.env` is ignored by Git; keep all keys private and do not commit this file.
+`REDIS_URL` is optional for local development, where the app uses an in-memory fallback. Production deployments require it for shareable previews. Connect a Redis database to the Vercel project and add its connection URL to the deployment environment. `.env` is ignored by Git; keep all keys private and do not commit this file.
 
 ## Commands
 
@@ -39,4 +38,4 @@ The form submits to `/api/generate`. Successful generations redirect to `/p/[slu
 
 ## Storage
 
-When both Upstash settings are present, preview data is stored in Redis and can be revisited across server restarts. Without them, local development uses a process-local in-memory `Map`; those links are temporary and do not work across restarts or multiple server instances.
+When `REDIS_URL` is present, preview data is stored in Redis and can be revisited across server restarts. Without it, local development uses a process-local in-memory `Map`; those links are temporary and do not work across restarts or multiple server instances.
